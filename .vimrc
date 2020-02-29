@@ -53,7 +53,7 @@ set tabstop=4            " 设置编辑时制表符占用空格数
 set shiftwidth=4         " 设置格式化时制表符占用空格数
 set softtabstop=4        " 设置4个空格为制表符
 set smarttab             " 在行和段开始处使用制表符
-set nowrap               " 禁止折行
+"set nowrap               " 禁止折行
 set backspace=2          " 使用回车键正常处理indent,eol,start等
 set sidescroll=10        " 设置向右滚动字符数
 set nofoldenable         " 禁用折叠代码
@@ -100,7 +100,7 @@ if has("gui_running")
     set guioptions-=r           " 隐藏右侧滚动条
     set guioptions-=b           " 隐藏底部滚动条
     set showtabline=0           " 隐藏Tab栏
-    set guicursor=n-v-c:ver5    " 设置光标为竖线
+"    set guicursor=n-v-c:ver5    " 设置光标为竖线
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -115,13 +115,14 @@ Plug 'chxuan/prepare-code'
 Plug 'chxuan/vim-buffer'
 Plug 'chxuan/vimplus-startify'
 Plug 'chxuan/tagbar'
-Plug 'Valloric/YouCompleteMe'
+Plug 'ycm-core/YouCompleteMe'
 Plug 'Yggdroot/LeaderF'
 Plug 'mileszs/ack.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'haya14busa/incsearch.vim'
 Plug 'iamcco/mathjax-support-for-mkdp'
 Plug 'iamcco/markdown-preview.vim'
+" Plug 'JamshedVesuna/vim-markdown-preview'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -148,6 +149,9 @@ Plug 'terryma/vim-smooth-scroll'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/github-complete.vim'
 Plug 'vim-scripts/indentpython.vim'
+Plug 'aben20807/vim-runner'
+Plug '907th/vim-auto-save'
+Plug 'Chiel92/vim-autoformat'
 
 call plug#end()            
 
@@ -185,6 +189,9 @@ set background=dark
 let g:onedark_termcolors=256
 colorscheme onedark
 
+"vim-runner
+let g:runner_run_key = "<F6>"
+
 " airline
 let g:airline_theme="onedark"
 let g:airline_powerline_fonts = 1
@@ -196,6 +203,7 @@ let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
+
 
 " cpp-mode
 nnoremap <leader>y :CopyCode<cr>
@@ -290,17 +298,20 @@ map g/ <Plug>(incsearch-stay)
 " markdown
 let uname = system('uname -s')
 if uname == "Darwin\n"
-    let g:mkdp_path_to_chrome = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome"
+   let g:mkdp_path_to_chrome = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome"
+   " let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
 else
-    let g:mkdp_path_to_chrome = '/usr/bin/google-chrome-stable %U'
+   let g:mkdp_path_to_chrome = '/usr/bin/google-chrome-stable %U'
 endif
 nmap <silent> <F7> <Plug>MarkdownPreview
 imap <silent> <F7> <Plug>MarkdownPreview
 nmap <silent> <F8> <Plug>StopMarkdownPreview
 imap <silent> <F8> <Plug>StopMarkdownPreview
+" let vim_markdown_preview_toggle=1
+" let vim_markdown_preview_hotkey='<C-m>'
+" let vim_markdown_preview_browser='Google Chrome'
 
-" vim-easymotion
-let g:EasyMotion_smartcase = 1
+
 map <leader>w <Plug>(easymotion-bd-w)
 nmap <leader>w <Plug>(easymotion-overwin-w)
 
