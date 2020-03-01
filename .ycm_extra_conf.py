@@ -37,7 +37,7 @@ import ycm_core
 flags = [
 '-Wall',
 '-Wextra',
-'-Werror',
+# '-Werror',
 '-Wno-long-long',
 '-Wno-variadic-macros',
 '-fexceptions',
@@ -51,7 +51,7 @@ flags = [
 # a "-std=<something>".
 # For a C project, you would set this to something like 'c99' instead of
 # 'c++11'.
-'-std=c++14',
+'-std=c++17',
 # ...and the same thing goes for the magic -x option which specifies the
 # language that the files to be compiled are written in. This is mostly
 # relevant for c++ headers.
@@ -75,11 +75,23 @@ flags = [
 '-isystem',
 '/usr/include/c++/8',
 '-isystem',
+'/usr/include/c++/9',
+'-isystem',
+'/usr/include/c++/9.1.0',
+'-isystem',
 '/usr/include',
 '-isystem',
 '/usr/include/x86_64-linux-gnu',
 '-isystem',
 '/usr/local/include',
+
+# Termux
+'-isystem',
+'/data/data/com.termux/files/usr/include',
+'-isystem',
+'/data/data/com.termux/files/usr/include/c++/v1',
+'-isystem',
+'/data/data/com.termux/files/usr/include/c++/v1/experimental',
 ]
 
 

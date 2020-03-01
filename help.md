@@ -48,7 +48,6 @@
 | `fa`         | 查找字母a，然后再按f键查找下一个     |
 | `<c-x><c-o>` | Emoji:dog:补全                       |
 
-
 ## 插入模式
 
 | 快捷键  | 说明                           |
@@ -211,6 +210,7 @@
 | `Y`            | 复制当前行，同 yy                                        |
 | `yt,`          | 复制到逗号                                               |
 | `yiw`          | 复制当前单词                                             |
+| `"+y`          | 复制当前选中到系统剪切板                                 |
 | `3yy`          | 复制光标下三行内容                                       |
 | `v0`           | 选中当前位置到行首                                       |
 | `v$`           | 选中当前位置到行末                                       |
@@ -323,14 +323,8 @@
 
 ## 其他
 
-| 快捷键                | 说明                              |
-| -------               | -----                             |
-| `vim -u NONE -N`      | 开启vim时不加载vimrc文件          |
-| `vimdiff file1 file2` | 显示文件差异                      |
-| `<leader>e`           | 快速编辑vimrc文件                 |
-| `<leader>s`           | 重新加载vimrc文件                 |
-| `<leader>h`           | 打开vimplus帮助文档               |
-| `<leader>H`           | 打开当前光标所在单词的vim帮助文档 |
-| `<leader><leader>i`   | 安装插件                          |
-| `<leader><leader>u`   | 更新插件                          |
-| `<leader><leader>c`   | 删除插件                          |
+| 快捷键                | 说明                       |
+| -------               | -----                      |
+| `vim -u NONE -N`      | 开启vim时不加载vimrc文件   |
+| `vimdiff file1 file2` | 显示文件差异               |
+| `vim -R filename`     | 以只读方式打开（阅读模式） |
