@@ -74,36 +74,6 @@ function backup_vimrc_file()
     fi
 }
 
-#备份原有的.vimrc.custom.plugins文件
-function backup_vimrc_custom_plugins_file()
-{
-    old_vimrc_plugins=$HOME"/.vimrc.custom.plugins"
-    is_exist=$(is_exist_file $old_vimrc_plugins)
-    if [ $is_exist == 1 ]; then
-        time=$(get_datetime)
-        backup_vimrc_plugins=$old_vimrc_plugins"_bak_"$time
-        read -p "Find "$old_vimrc_plugins" already exists,backup "$old_vimrc_plugins" to "$backup_vimrc_plugins"? [Y/N] " ch
-        if [[ $ch == "Y" ]] || [[ $ch == "y" ]]; then
-            cp $old_vimrc_plugins $backup_vimrc_plugins
-        fi
-    fi
-}
-
-#备份原有的.vimrc.custom.config文件
-function backup_vimrc_custom_config_file()
-{
-    old_vimrc_config=$HOME"/.vimrc.custom.config"
-    is_exist=$(is_exist_file $old_vimrc_config)
-    if [ $is_exist == 1 ]; then
-        time=$(get_datetime)
-        backup_vimrc_config=$old_vimrc_config"_bak_"$time
-        read -p "Find "$old_vimrc_config" already exists,backup "$old_vimrc_config" to "$backup_vimrc_config"? [Y/N] " ch
-        if [[ $ch == "Y" ]] || [[ $ch == "y" ]]; then
-            cp $old_vimrc_config $backup_vimrc_config
-        fi
-    fi
-}
-
 #备份原有的.vim目录
 function backup_vim_dir()
 {
@@ -123,8 +93,6 @@ function backup_vim_dir()
 function backup_vimrc_and_vim()
 {
     backup_vimrc_file
-    backup_vimrc_custom_plugins_file
-    backup_vimrc_custom_config_file
     backup_vim_dir
 }
 
@@ -157,79 +125,13 @@ function is_macos1014()
 }
 
 # 在ubuntu上源代码安装vim
-function compile_vim_on_ubuntu()
+function compile_vim_on_ubuntu_like()
 {
-    sudo apt-get install -y libncurses5-dev libncurses5 libgnome2-dev libgnomeui-dev \
-        libgtk2.0-dev libatk1.0-dev libbonoboui2-dev \
-        libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev python3-dev ruby-dev lua5.1 lua5.1-dev
-
-    rm -rf ~/vim81
-    git clone https://gitee.com/chxuan/vim81.git ~/vim81
-    cd ~/vim81
-    ./configure --with-features=huge \
-        --enable-multibyte \
-        --enable-rubyinterp \
-        --enable-pythoninterp \
-        --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu \
-        --enable-perlinterp \
-        --enable-luainterp \
-        --enable-gui=gtk2 \
-        --enable-cscope \
-        --prefix=/usr
-    make
-    sudo make install
-    cd -
-}
-
-# 在debian上源代码安装vim
-function compile_vim_on_debian()
-{
-    sudo apt-get install -y libncurses5-dev libncurses5 libgtk2.0-dev libatk1.0-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev python3-dev ruby-dev lua5.1 lua5.1-dev
-
-    rm -rf ~/vim81
-    git clone https://gitee.com/chxuan/vim81.git ~/vim81
-    cd ~/vim81
-    ./configure --with-features=huge \
-        --enable-multibyte \
-        --enable-rubyinterp \
-        --enable-pythoninterp \
-        --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu \
-        --enable-perlinterp \
-        --enable-luainterp \
-        --enable-gui=gtk2 \
-        --enable-cscope \
-        --prefix=/usr
-    make
-    sudo make install
-    cd -
-}
-
-# 在centos上源代码安装vim
-function compile_vim_on_centos()
-{
-    sudo yum install -y ruby ruby-devel lua lua-devel luajit \
-        luajit-devel ctags git python python-devel \
-        python34 python34-devel tcl-devel \
-        perl perl-devel perl-ExtUtils-ParseXS \
-        perl-ExtUtils-XSpp perl-ExtUtils-CBuilder \
-        perl-ExtUtils-Embed libX11-devel ncurses-devel
-    
-    rm -rf ~/vim81
-    git clone https://gitee.com/chxuan/vim81.git ~/vim81
-    cd ~/vim81
-    ./configure --with-features=huge \
-        --enable-multibyte \
-        --with-tlib=tinfo \
-        --enable-rubyinterp=yes \
-        --enable-pythoninterp=yes \
-        --with-python-config-dir=/lib64/python2.7/config \
-        --enable-perlinterp=yes \
-        --enable-luainterp=yes \
-        --enable-gui=gtk2 \
-        --enable-cscope \
-        --prefix=/usr
-    make
-    sudo make install
+    sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+    git clone https://github.com/neovim/neovim.git
+    git checkout stable
+    cd ./neovim
+    make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=/usr/local/bin/  install
     cd -
 }
 
@@ -268,9 +170,9 @@ function install_prepare_software_on_ubuntu()
     sudo apt-get install -y exuberant-ctags build-essential python python-dev python3-dev fontconfig libfile-next-perl ack-grep git
 
     if [ $version -ge 18 ];then
-        sudo apt-get install -y vim
+        sudo apt-get install -y nvim
     else
-        compile_vim_on_ubuntu
+        compile_vim_on_ubuntu_like
     fi
 }
 
@@ -325,27 +227,18 @@ function install_prepare_software_on_opensuse()
 # 拷贝文件
 function copy_files()
 {
-    rm -rf ~/.vimrc
-    ln -s ${PWD}/.vimrc ~
+    mkdir ~/.config/nvim
 
-    rm -rf ~/.vimrc.custom.plugins
-    cp ${PWD}/.vimrc.custom.plugins ~
-
-    rm -rf ~/.vimrc.custom.config
-    cp ${PWD}/.vimrc.custom.config ~
+    ln -s ${PWD}/.vimrc ~/.config/nvim/init.vim
 
     rm -rf ~/.ycm_extra_conf.py
     ln -s ${PWD}/.ycm_extra_conf.py ~
 
-    mkdir ~/.vim
-    rm -rf ~/.vim/colors
-    ln -s ${PWD}/colors ~/.vim
+    ln -s ${PWD}/colors ~/.config/nvim/colors
 
-    rm -rf ~/.vim/ftplugin
-    ln -s ${PWD}/ftplugin ~/.vim
+    ln -s ${PWD}/ftplugin ~/.config/nvim/ftplugin
 
-    rm -rf ~/.vim/autoload
-    ln -s ${PWD}/autoload ~/.vim
+    ln -s ${PWD}/autoload ~/.config/nvim/nvim/autoload
 }
 
 # 安装mac平台字体
@@ -381,6 +274,7 @@ function install_fonts_on_linux()
 function install_vim_plugin()
 {
     vim -c "PlugInstall" -c "q" -c "q"
+    vim -c "CocInstall coc-python" -c "q" -c "q"
 }
 
 # 安装ycm插件
@@ -446,7 +340,7 @@ function install_vimplus_on_mac()
     install_fonts_on_mac
     install_ycm
     install_vim_plugin
-    print_logo
+    # print_logo
 }
 
 # 在android平台安装vimplus
@@ -458,7 +352,7 @@ function install_vimplus_on_android()
     install_fonts_on_android
     install_ycm_on_android
     install_vim_plugin
-    print_logo
+    # print_logo
 }
 
 # 开始安装vimplus
@@ -468,7 +362,7 @@ function begin_install_vimplus()
     install_fonts_on_linux
     install_ycm
     install_vim_plugin
-    print_logo
+    # print_logo
 }
 
 # 在ubuntu上安装vimplus
